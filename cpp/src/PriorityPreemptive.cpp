@@ -79,5 +79,18 @@ std::vector<Process> priorityPreemptive(const std::vector<Process> &processes)
         }
     }
 
-    return result;
+    // Merge consecutive processes with the same process_id
+    std::vector<Process> mergedResult;
+    for (size_t i = 0; i < result.size(); i++) {
+        const Process& currentProcess = result[i];
+
+        if (!mergedResult.empty() &&
+            mergedResult.back().process_id == currentProcess.process_id) {
+            mergedResult.back().burst_time += currentProcess.burst_time;
+        } else {
+            mergedResult.push_back(currentProcess);
+        }
+    }
+
+    return mergedResult;
 }
